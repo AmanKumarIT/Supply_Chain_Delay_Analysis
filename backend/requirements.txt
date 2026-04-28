@@ -12,3 +12,4 @@ redis
 osmnx
 httpx
 geopy
+python-dotenv
