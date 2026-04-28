@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+neo4j
+psycopg2-binary
+sqlalchemy
+pandas
+scikit-learn
+xgboost
+python-dotenv
+networkx
+redis
+osmnx
+httpx
+geopy

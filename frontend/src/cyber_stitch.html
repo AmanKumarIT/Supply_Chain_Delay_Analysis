@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CORE_INTEL_V.04 - Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "outline-variant": "#3a494b",
+                "surface-bright": "#3a3939",
+                "on-primary-fixed": "#002022",
+                "surface-container": "#201f1f",
+                "surface-tint": "#00dbe7",
+                "primary": "#e1fdff",
+                "on-tertiary": "#313300",
+                "error-container": "#93000a",
+                "on-surface-variant": "#b9cacb",
+                "on-background": "#e5e2e1",
+                "on-surface": "#e5e2e1",
+                "on-secondary-container": "#500050",
+                "on-secondary-fixed-variant": "#810081",
+                "tertiary-container": "#dfe300",
+                "on-secondary": "#5b005b",
+                "secondary-fixed": "#ffd7f5",
+                "surface": "#131313",
+                "surface-dim": "#131313",
+                "on-secondary-fixed": "#380038",
+                "on-primary": "#00363a",
+                "background": "#131313",
+                "secondary-fixed-dim": "#ffabf3",
+                "error": "#ffb4ab",
+                "on-tertiary-container": "#616300",
+                "on-tertiary-fixed-variant": "#484a00",
+                "surface-container-low": "#1c1b1b",
+                "surface-container-high": "#2a2a2a",
+                "secondary": "#ffabf3",
+                "on-primary-container": "#006a71",
+                "on-error-container": "#ffdad6",
+                "primary-container": "#00f2ff",
+                "outline": "#849495",
+                "surface-container-lowest": "#0e0e0e",
+                "surface-variant": "#353534",
+                "on-error": "#690005",
+                "tertiary-fixed-dim": "#cace00",
+                "inverse-on-surface": "#313030",
+                "inverse-primary": "#00696f",
+                "surface-container-highest": "#353534",
+                "tertiary": "#fbff6b",
+                "on-primary-fixed-variant": "#004f54",
+                "on-tertiary-fixed": "#1c1d00",
+                "secondary-container": "#fe00fe",
+                "tertiary-fixed": "#e6eb00",
+                "inverse-surface": "#e5e2e1",
+                "primary-fixed-dim": "#00dbe7",
+                "primary-fixed": "#74f5ff"
+            },
+            "borderRadius": {
+                "DEFAULT": "0px",
+                "lg": "0px",
+                "xl": "0px",
+                "full": "9999px"
+            },
+            "fontFamily": {
+                "headline": ["Manrope"],
+                "display": ["Manrope"],
+                "body": ["Inter"],
+                "label": ["Inter"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hud-corner-tl { border-top: 2px solid #00F2FF; border-left: 2px solid #00F2FF; width: 8px; height: 8px; position: absolute; top: 0; left: 0; }
+        .hud-corner-tr { border-top: 2px solid #00F2FF; border-right: 2px solid #00F2FF; width: 8px; height: 8px; position: absolute; top: 0; right: 0; }
+        .hud-corner-bl { border-bottom: 2px solid #00F2FF; border-left: 2px solid #00F2FF; width: 8px; height: 8px; position: absolute; bottom: 0; left: 0; }
+        .hud-corner-br { border-bottom: 2px solid #00F2FF; border-right: 2px solid #00F2FF; width: 8px; height: 8px; position: absolute; bottom: 0; right: 0; }
+        
+        .radar-sweep {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent 0deg, rgba(0, 242, 255, 0.1) 20deg, transparent 40deg);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .scan-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00F2FF, transparent);
+            width: 100%;
+            position: absolute;
+            z-index: 10;
+            box-shadow: 0 0 15px #00F2FF;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[#050505] text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container min-h-screen overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex items-center justify-between px-4 h-16 bg-[#131313]/90 backdrop-blur-lg border-b border-[#00F2FF]/20 shadow-[0_0_20px_rgba(0,242,255,0.05)]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#00F2FF]" data-icon="terminal">terminal</span>
+<h1 class="font-['Manrope'] font-black uppercase tracking-widest text-sm text-[#00F2FF]">CORE_INTEL_V.04</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="text-[10px] font-mono text-zinc-500 hidden sm:block">LAT: 34.0522 N</div>
+<span class="material-symbols-outlined text-[#00F2FF]" data-icon="sensors">sensors</span>
+</div>
+</header>
+<main class="pt-20 pb-24 px-4 max-w-lg mx-auto space-y-6">
+<!-- Hero: Holographic Map Widget -->
+<section class="relative w-full aspect-square bg-surface-container-lowest border border-primary/10 overflow-hidden shadow-[inset_0_0_40px_rgba(0,0,0,0.8)]">
+<div class="hud-corner-tl"></div><div class="hud-corner-tr"></div>
+<div class="hud-corner-bl"></div><div class="hud-corner-br"></div>
+<div class="absolute top-2 left-2 z-20">
+<span class="bg-[#00F2FF]/10 text-[#00F2FF] text-[8px] px-1 font-bold tracking-tighter uppercase">GEO_SYNC_ACTIVE</span>
+</div>
+<!-- Map Placeholder -->
+<div class="absolute inset-0 grayscale opacity-40 brightness-50 contrast-125 scale-110">
+<img alt="Global satellite map dark" class="w-full h-full object-cover" data-alt="stylized dark technical world map with glowing cyan grid lines and node connections in a digital blueprint style" data-location="Global" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUkGJXUjXzwsgngx9aAezDO44TXsjHoio_WlUoGPM_kn85cRelw6pRhP5xTyiiEDibznfTcwlmpN3HXkBGIiuoGZihdTIZPnq-CP4zn0O17lwhAlUQRnYnoJrNC_mI11eSohB1q70C1NYHtI-GIzvMUfs_iHMJZx_peQELOFGXwPkikXSmHkepsbnhXn4BxMEkNL53NqUWJtRqkxQuIovwZHK58PNyYo6F93r54cP3lVhmIUPNFNO5eGaUdyKlyynyE7T1tXtgF6g"/>
+</div>
+<!-- Overlay Elements -->
+<div class="radar-sweep"></div>
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<svg class="w-full h-full" viewbox="0 0 400 400">
+<circle cx="200" cy="200" fill="none" r="180" stroke="rgba(0, 242, 255, 0.1)" stroke-width="0.5"></circle>
+<circle cx="200" cy="200" fill="none" r="120" stroke="rgba(0, 242, 255, 0.1)" stroke-width="0.5"></circle>
+<circle cx="200" cy="200" fill="none" r="60" stroke="rgba(0, 242, 255, 0.1)" stroke-width="0.5"></circle>
+<line stroke="rgba(0, 242, 255, 0.1)" stroke-width="0.5" x1="200" x2="200" y1="0" y2="400"></line>
+<line stroke="rgba(0, 242, 255, 0.1)" stroke-width="0.5" x1="0" x2="400" y1="200" y2="200"></line>
+<!-- Connection Lines -->
+<path class="opacity-80" d="M100,150 Q200,50 300,180" fill="none" stroke="#00F2FF" stroke-dasharray="4 2" stroke-width="1.5"></path>
+<path class="opacity-60" d="M50,250 Q150,300 350,220" fill="none" stroke="#00F2FF" stroke-dasharray="4 2" stroke-width="1.5"></path>
+<!-- Points -->
+<circle class="animate-pulse shadow-[0_0_10px_#00F2FF]" cx="100" cy="150" fill="#00F2FF" r="3"></circle>
+<circle cx="300" cy="180" fill="#00F2FF" r="3"></circle>
+<circle cx="50" cy="250" fill="#00F2FF" r="3"></circle>
+<circle cx="350" cy="220" fill="#00F2FF" r="3"></circle>
+</svg>
+</div>
+<div class="absolute bottom-4 right-4 z-20 text-right">
+<p class="text-[#00F2FF] font-black text-xs tracking-widest uppercase glow-text">Command Center</p>
+<p class="text-zinc-500 text-[10px] font-mono uppercase">System: Operational</p>
+</div>
+</section>
+<!-- Disruption HUD Widgets Grid -->
+<div class="grid grid-cols-2 gap-4">
+<!-- Thermal Stress Widget -->
+<div class="col-span-1 bg-surface-container-low border-l-2 border-[#fe00fe]/40 p-4 relative overflow-hidden">
+<div class="flex justify-between items-start mb-4">
+<span class="text-[10px] font-bold text-zinc-400 tracking-tighter uppercase">Thermal Stress</span>
+<span class="material-symbols-outlined text-[#fe00fe] text-sm" data-icon="thermostat">thermostat</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-end">
+<span class="text-2xl font-black text-secondary glow-text">84<span class="text-xs ml-1">°C</span></span>
+<span class="text-[8px] text-zinc-500 uppercase">Critical Threshold</span>
+</div>
+<!-- Glow Meter -->
+<div class="h-2 w-full bg-zinc-900 overflow-hidden">
+<div class="h-full w-[84%] bg-gradient-to-r from-secondary to-secondary-container shadow-[0_0_10px_#fe00fe]"></div>
+</div>
+</div>
+<div class="mt-4 flex gap-1">
+<div class="h-1 flex-1 bg-secondary opacity-20"></div>
+<div class="h-1 flex-1 bg-secondary opacity-40"></div>
+<div class="h-1 flex-1 bg-secondary"></div>
+</div>
+</div>
+<!-- Cargo Health Widget -->
+<div class="col-span-1 bg-surface-container-low border-l-2 border-tertiary/40 p-4 relative">
+<div class="flex justify-between items-start mb-4">
+<span class="text-[10px] font-bold text-zinc-400 tracking-tighter uppercase">Cargo Health</span>
+<span class="material-symbols-outlined text-tertiary text-sm" data-icon="ecg_heart">ecg_heart</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-end">
+<span class="text-2xl font-black text-tertiary glow-text">99.2<span class="text-xs ml-1">%</span></span>
+<span class="text-[8px] text-zinc-500 uppercase">Stability</span>
+</div>
+<div class="flex items-center gap-1 mt-2">
+<div class="w-1 h-3 bg-tertiary"></div>
+<div class="w-1 h-2 bg-tertiary opacity-50"></div>
+<div class="w-1 h-4 bg-tertiary"></div>
+<div class="w-1 h-1 bg-tertiary opacity-20"></div>
+<div class="w-1 h-3 bg-tertiary"></div>
+</div>
+</div>
+</div>
+<!-- Network Latency Widget -->
+<div class="col-span-2 bg-surface-container-low border-b-2 border-primary-container/20 p-4 overflow-hidden relative">
+<div class="flex justify-between items-center mb-6">
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-zinc-400 tracking-tighter uppercase">Network Latency</span>
+<span class="text-primary-fixed-dim text-xs font-mono">Pulse Wave Analysis</span>
+</div>
+<span class="text-lg font-black text-primary-container font-mono tracking-tighter">14.0 MS</span>
+</div>
+<!-- Pulse Wave Visualization -->
+<div class="h-16 w-full relative flex items-end justify-between gap-1">
+<div class="flex-1 bg-primary/5 h-[30%]"></div>
+<div class="flex-1 bg-primary/10 h-[45%]"></div>
+<div class="flex-1 bg-primary/20 h-[60%] border-t-2 border-primary-container"></div>
+<div class="flex-1 bg-primary/30 h-[85%] border-t-2 border-primary-container shadow-[0_0_10px_#00F2FF]"></div>
+<div class="flex-1 bg-primary/20 h-[55%] border-t-2 border-primary-container"></div>
+<div class="flex-1 bg-primary/10 h-[40%]"></div>
+<div class="flex-1 bg-primary/5 h-[25%]"></div>
+<div class="flex-1 bg-primary/10 h-[35%]"></div>
+<div class="flex-1 bg-primary/20 h-[50%] border-t-2 border-primary-container"></div>
+<div class="flex-1 bg-primary/10 h-[30%]"></div>
+<div class="flex-1 bg-primary/5 h-[20%]"></div>
+</div>
+<div class="absolute top-2 right-2 flex gap-1">
+<div class="w-1 h-1 bg-primary-container animate-ping"></div>
+<span class="text-[8px] text-primary-container uppercase font-bold">Live</span>
+</div>
+</div>
+<!-- Fleet Status Detail -->
+<div class="col-span-2 grid grid-cols-3 gap-2">
+<div class="bg-surface-container-highest p-3 flex flex-col items-center justify-center">
+<span class="text-[8px] text-zinc-500 uppercase tracking-widest mb-1">Active</span>
+<span class="text-lg font-black text-on-surface">1,204</span>
+</div>
+<div class="bg-surface-container-highest p-3 flex flex-col items-center justify-center">
+<span class="text-[8px] text-zinc-500 uppercase tracking-widest mb-1">Transit</span>
+<span class="text-lg font-black text-on-surface">432</span>
+</div>
+<div class="bg-surface-container-highest p-3 flex flex-col items-center justify-center">
+<span class="text-[8px] text-zinc-500 uppercase tracking-widest mb-1">Diverted</span>
+<span class="text-lg font-black text-error">12</span>
+</div>
+</div>
+</div>
+<!-- Terminal Output / Logs -->
+<section class="bg-surface-container-lowest border border-white/5 p-4 font-mono text-[10px] space-y-1">
+<div class="flex items-center gap-2 text-zinc-600">
+<span class="text-[#00F2FF]">[14:02:11]</span>
+<span>SYSTEM_CHECK: ALL_MODULES_NOMINAL</span>
+</div>
+<div class="flex items-center gap-2 text-zinc-400">
+<span class="text-[#00F2FF]">[14:03:45]</span>
+<span class="text-secondary">WARNING: CARGO_09_TEMP_RISE</span>
+</div>
+<div class="flex items-center gap-2 text-zinc-600">
+<span class="text-[#00F2FF]">[14:05:00]</span>
+<span>RE-ROUTING_FLEET_UNIT_X45...</span>
+</div>
+<div class="mt-2 pt-2 border-t border-white/5 flex justify-between items-center text-[8px] tracking-widest text-zinc-500 uppercase">
+<span>Total Nodes: 4,092</span>
+<span>Uptime: 99.98%</span>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-stretch h-18 bg-[#0e0e0e] border-t-2 border-[#00F2FF]/40 shadow-[0_-4px_20px_rgba(0,242,255,0.1)]">
+<a class="flex flex-col items-center justify-center text-[#00F2FF] bg-[#00F2FF]/5 border-t-2 border-[#00F2FF] py-2 px-4 transition-all active:bg-[#00F2FF]/20" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="grid_view" data-weight="fill" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+<span class="font-['Inter'] font-medium text-[10px] tracking-[0.2em] uppercase">DASHBOARD</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-600 py-2 px-4 hover:text-[#00F2FF] transition-all active:bg-[#00F2FF]/20" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="rocket_launch">rocket_launch</span>
+<span class="font-['Inter'] font-medium text-[10px] tracking-[0.2em] uppercase">FLEET</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-600 py-2 px-4 hover:text-[#00F2FF] transition-all active:bg-[#00F2FF]/20" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="package_2">package_2</span>
+<span class="font-['Inter'] font-medium text-[10px] tracking-[0.2em] uppercase">LOGISTICS</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-600 py-2 px-4 hover:text-[#00F2FF] transition-all active:bg-[#00F2FF]/20" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="memory">memory</span>
+<span class="font-['Inter'] font-medium text-[10px] tracking-[0.2em] uppercase">SYSTEM</span>
+</a>
+</nav>
+</body></html>
