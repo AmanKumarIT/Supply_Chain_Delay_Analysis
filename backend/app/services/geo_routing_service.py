@@ -13,6 +13,9 @@ import math
 from typing import List, Tuple, Dict, Optional
 from functools import lru_cache
 
+ox.settings.log_console = True
+ox.settings.use_cache = True
+
 
 # City coordinates for geocoding (avoiding external geocoder calls)
 CITY_COORDS: Dict[str, Tuple[float, float]] = {
